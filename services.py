@@ -21,10 +21,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2schema = _security.OAuth2PasswordBearer("/token")
 
 
-def _create_database():
-    return _db.Base.metadata.create_all(bind=_db.engine)
-
-
 def get_db():
     db = _db.SessionLocal()
     try:
