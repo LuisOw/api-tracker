@@ -20,6 +20,8 @@ import schemas as _schemas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2schema = _security.OAuth2PasswordBearer("/token")
 
+_models.Base.metadata.create_all(bind=_db.engine)
+
 
 def get_db():
     db = _db.SessionLocal()
