@@ -171,8 +171,10 @@ def create_access_token(id: str):
 def authenticate_user(db: _orm.Session, username: str, password: str):
     user = get_user_by_username(db, username)
     if not user:
+        print("username nor found")
         return False
     if not _auth.verify_password(password, user.hashed_password, pwd_context):
+        print("incorrect password")
         return False
     return user
 

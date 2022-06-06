@@ -46,6 +46,7 @@ async def login(
     form_data: _security.OAuth2PasswordRequestForm = _fastapi.Depends(),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
+    print(form_data.username, form_data.password)
     user = _services.authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise _fastapi.HTTPException(
