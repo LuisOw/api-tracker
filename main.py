@@ -74,7 +74,12 @@ async def post_research(
     return _services.create_research(db, research, current_user.id)
 
 
-@app.put("/pesquisas/{id}", status_code=204, tags=["Pesquisa"])
+@app.put(
+    "/pesquisas/{id}",
+    status_code=204,
+    response_class=_fastapi.Response,
+    tags=["Pesquisa"],
+)
 async def put_research(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
@@ -84,7 +89,12 @@ async def put_research(
     _services.update_research(db, research, current_user.id, id)
 
 
-@app.delete("/pesquisas/{id}", status_code=204, tags=["Pesquisa"])
+@app.delete(
+    "/pesquisas/{id}",
+    status_code=204,
+    response_class=_fastapi.Response,
+    tags=["Pesquisa"],
+)
 async def delete_research(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
@@ -119,6 +129,7 @@ async def post_questionnaire(
 @app.put(
     "/pesquisas/{research_id}/questionarios/{id}",
     status_code=204,
+    response_class=_fastapi.Response,
     tags=["Questionario"],
 )
 async def put_questionnaire(
@@ -134,6 +145,7 @@ async def put_questionnaire(
 @app.delete(
     "/pesquisas/{research_id}/questionarios/{id}",
     status_code=204,
+    response_class=_fastapi.Response,
     tags=["Questionario"],
 )
 async def delete_questionnaire(
@@ -177,6 +189,7 @@ async def post_question(
 @app.put(
     "/pesquisas/{research_id}/questionarios/{questionnaire_id}/questoes/{id}",
     status_code=204,
+    response_class=_fastapi.Response,
     tags=["Questão"],
 )
 async def put_question(
@@ -192,6 +205,7 @@ async def put_question(
 @app.delete(
     "/pesquisas/{research_id}/questionarios/{questionnaire_id}/questoes/{id}",
     status_code=204,
+    response_class=_fastapi.Response,
     tags=["Questão"],
 )
 async def delete_question(
@@ -231,6 +245,7 @@ async def post_alternative(
 @app.put(
     "/pesquisas/{research_id}/questionarios/{questionnaire_id}/questoes/{question_id}/alternativas/{id}",
     status_code=204,
+    response_class=_fastapi.Response,
     tags=["Alternativa"],
 )
 async def put_alternative(
@@ -246,6 +261,7 @@ async def put_alternative(
 @app.delete(
     "/pesquisas/{research_id}/questionarios/{questionnaire_id}/questoes/{question_id}/alternativas/{id}",
     status_code=204,
+    response_class=_fastapi.Response,
     tags=["Alternativa"],
 )
 async def delete_question(
