@@ -54,3 +54,7 @@ def delete_questionnaire(db: Session, research_id: int, id: int, owner_id: int):
         Questionnaire.owner_id == owner_id,
     ).delete()
     db.commit()
+
+
+def get_public_questionnaires(db: Session):
+    return db.query(Questionnaire).filter(Questionnaire.public == "publico").all()

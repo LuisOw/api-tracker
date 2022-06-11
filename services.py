@@ -190,3 +190,7 @@ def get_current_user(
         raise _fastapi.HTTPException(
             status_code=401, detail="Invalid email or password"
         )
+
+
+def get_public_questionnaires(db: _orm.Session):
+    return _questionnaireRepo.get_public_questionnaires(db=db)
