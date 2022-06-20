@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 import database as _db
 
@@ -57,7 +57,10 @@ class Question(_db.Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="questions")
-    questionnaire = relationship("Questionnaire", back_populates="questions")
+    questionnaire = relationship(
+        "Questionnaire",
+        backref=backref("questions", cascade="all, delete-orphan"),
+    )
     alternatives = relationship(
         "Alternative", back_populates="question", cascade="all, delete-orphan"
     )
@@ -74,4 +77,7 @@ class Alternative(_db.Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="alternatives")
-    question = relationship("Question", back_populates="alternatives")
+    question = relationship(
+        "Question",
+        backref=backref("alternatives", cascade=("all, delete-orphan")),
+    )
