@@ -1,11 +1,8 @@
-from turtle import title
-from typing import List
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from schemas import QuestionnaireCreate
 from models import Alternative, Question, Questionnaire
-import models as _models
 
 
 def get_all_questionnaires_by_research(db: Session, research_id: int, owner_id: int):

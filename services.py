@@ -1,4 +1,3 @@
-from asyncore import read
 from typing import List
 import fastapi as _fastapi
 import fastapi.security as _security
@@ -8,7 +7,6 @@ from passlib.context import CryptContext
 
 
 import database as _db
-import models as _models
 import repository.UserRepository as _userRepo
 import repository.ResearchRepository as _researchRepo
 import repository.QuestionnaireRepository as _questionnaireRepo
