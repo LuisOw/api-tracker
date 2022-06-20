@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from schemas import QuestionnaireCreate
-from models import Questionnaire
+from models import Alternative, Question, Questionnaire
+import models as _models
 
 
 def get_all_questionnaires_by_research(db: Session, research_id: int, owner_id: int):
@@ -59,7 +60,13 @@ def delete_questionnaire(db: Session, research_id: int, id: int, owner_id: int):
 
 
 def get_public_questionnaires(db: Session):
-    return db.query(Questionnaire).filter(Questionnaire.public == "publico").all()
+    return (
+        db.query(Questionnaire)
+        .join(Question)
+        .join(Alternative)
+        .filter(Questionnaire.public == "publico")
+        .all()
+    )
 
 
 def add_questionnaires_from_template(

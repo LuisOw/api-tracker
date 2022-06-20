@@ -292,7 +292,11 @@ async def delete_question(
     _services.delete_alternative(db, question_id, id, current_user.id)
 
 
-@app.get("/questionarios", tags=["Questionario"])
+@app.get(
+    "/questionarios",
+    tags=["Questionario"],
+    response_model=List[_schemas.QuestionnaireTemplate],
+)
 async def get_public_questionanires(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),

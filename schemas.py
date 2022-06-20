@@ -1,5 +1,5 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional, Union
+from pydantic import BaseModel
+from typing import List, Optional, Union
 
 
 class ResearchBase(BaseModel):
@@ -93,3 +93,14 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
+
+
+class QuestionTemplate(Question):
+    alternatives: List[Alternative]
+
+
+class QuestionnaireTemplate(Questionnaire):
+    questions: List[QuestionTemplate]
+
+    class Config:
+        orm_mode = True
