@@ -1,3 +1,5 @@
+from turtle import title
+from typing import List
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
@@ -58,3 +60,25 @@ def delete_questionnaire(db: Session, research_id: int, id: int, owner_id: int):
 
 def get_public_questionnaires(db: Session):
     return db.query(Questionnaire).filter(Questionnaire.public == "publico").all()
+
+
+def add_questionnaires_from_template(
+    db: Session, research_id: int, owner_id: int, original_id: int
+):
+
+    saved_template = (
+        db.query(Questionnaire)
+        .filter(Questionnaire.public == "publico", Questionnaire.id == original_id)
+        .first()
+    )
+
+    db_questionnaire = Questionnaire(
+        title=saved_template.title,
+        research_id=research_id,
+        owner_id=owner_id,
+        public="template",
+    )
+    db.add(db_questionnaire)
+    db.commit()
+    db.refresh(db_questionnaire)
+    return db_questionnaire

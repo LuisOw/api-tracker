@@ -1,3 +1,4 @@
+from typing import List
 import fastapi as _fastapi
 import fastapi.security as _security
 import sqlalchemy.orm as _orm
@@ -155,6 +156,24 @@ async def delete_questionnaire(
     id: str = None,
 ):
     _services.delete_questionnaire(db, research_id, id, current_user.id)
+
+
+@app.post(
+    "/pesquisas/{research_id}/questionarios/templates",
+    tags=["Questionario"],
+    response_model=List[_schemas.Questionnaire],
+)
+async def post_questionnaires_template(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    research_id: str = None,
+    ids_list: List[int] = None,
+):
+    saved_questionnaires = _services.add_questionnaire_templates(
+        db=db, research_id=research_id, owner_id=current_user.id, ids_list=ids_list
+    )
+
+    return saved_questionnaires
 
 
 @app.get(

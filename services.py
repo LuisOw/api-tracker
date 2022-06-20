@@ -1,4 +1,5 @@
 from asyncore import read
+from typing import List
 import fastapi as _fastapi
 import fastapi.security as _security
 import sqlalchemy.orm as _orm
@@ -194,3 +195,35 @@ def get_current_user(
 
 def get_public_questionnaires(db: _orm.Session):
     return _questionnaireRepo.get_public_questionnaires(db=db)
+
+
+def add_questionnaire_templates(
+    db: _orm.Session, research_id: int, owner_id: int, ids_list: List[int]
+):
+
+    final_questionnaire_list = []
+    for original_questionnaire_id in ids_list:
+        saved_questionnaire = _questionnaireRepo.add_questionnaires_from_template(
+            db=db,
+            research_id=research_id,
+            owner_id=owner_id,
+            original_id=original_questionnaire_id,
+        )
+        final_questionnaire_list.append(saved_questionnaire)
+        original_questions = _questionRepo.get_all_questions_by_questionnaire_template(
+            db=db, questionnaire_id=original_questionnaire_id
+        )
+        for original_question in original_questions:
+            saved_question = _questionRepo.add_questions_from_template(
+                db=db,
+                owner_id=owner_id,
+                new_questionnaire_id=saved_questionnaire.id,
+                original_question=original_question,
+            )
+            _alternativeRepo.add_alternative_from_template(
+                db=db,
+                original_question_id=original_question.id,
+                owner_id=owner_id,
+                new_question_id=saved_question.id,
+            )
+    return final_questionnaire_list

@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
@@ -14,6 +15,12 @@ def get_all_questions_by_questionnaire(
             Question.questionnaire_id == questionnaire_id, Question.owner_id == owner_id
         )
         .all()
+    )
+
+
+def get_all_questions_by_questionnaire_template(db: Session, questionnaire_id: int):
+    return (
+        db.query(Question).filter(Question.questionnaire_id == questionnaire_id).all()
     )
 
 
@@ -52,3 +59,19 @@ def delete_question(db: Session, questionnaire_id: int, id: int, owner_id: int):
         Question.owner_id == owner_id,
     ).delete()
     db.commit()
+
+
+def add_questions_from_template(
+    db: Session, owner_id: int, new_questionnaire_id: int, original_question: Question
+):
+
+    db_question = Question(
+        query=original_question.query,
+        order=original_question.order,
+        questionnaire_id=new_questionnaire_id,
+        owner_id=owner_id,
+    )
+    db.add(db_question)
+    db.commit()
+    db.refresh(db_question)
+    return db_question

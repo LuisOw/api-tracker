@@ -55,3 +55,23 @@ def delete_alternative(db: Session, question_id: int, id: int, owner_id):
         Alternative.owner_id == owner_id,
     ).delete()
     db.commit()
+
+
+def add_alternative_from_template(
+    db: Session, original_question_id: int, owner_id: int, new_question_id: int
+):
+    original_alternatives = (
+        db.query(Alternative)
+        .filter(Alternative.question_id == original_question_id)
+        .all()
+    )
+    for original_alternative in original_alternatives:
+        new_alternative = Alternative(
+            type=original_alternative.type,
+            text=original_alternative.text,
+            value=original_alternative.value,
+            question_id=new_question_id,
+            owner_id=owner_id,
+        )
+        db.add(new_alternative)
+    db.commit()
