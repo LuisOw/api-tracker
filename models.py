@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
@@ -26,7 +27,9 @@ class Research(_db.Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="researches")
-    questionnaires = relationship("Questionnaire", back_populates="research")
+    questionnaires = relationship(
+        "Questionnaire", back_populates="research", cascade="all, delete-orphan"
+    )
 
 
 class Questionnaire(_db.Base):
@@ -40,7 +43,9 @@ class Questionnaire(_db.Base):
 
     owner = relationship("User", back_populates="questionnaires")
     research = relationship("Research", back_populates="questionnaires")
-    questions = relationship("Question", back_populates="questionnaire")
+    questions = relationship(
+        "Question", back_populates="questionnaire", cascade="all, delete-orphan"
+    )
 
 
 class Question(_db.Base):
@@ -54,7 +59,9 @@ class Question(_db.Base):
 
     owner = relationship("User", back_populates="questions")
     questionnaire = relationship("Questionnaire", back_populates="questions")
-    alternatives = relationship("Alternative", back_populates="question")
+    alternatives = relationship(
+        "Alternative", back_populates="question", cascade="all, delete-orphan"
+    )
 
 
 class Alternative(_db.Base):
