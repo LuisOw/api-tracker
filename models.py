@@ -74,4 +74,4 @@ class Alternative(_db.Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="alternatives")
-    question = relationship("Question", back_populates="alternative")
+    question = relationship("Question", back_populates="alternatives")
