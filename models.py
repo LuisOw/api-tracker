@@ -57,10 +57,7 @@ class Question(_db.Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="questions")
-    questionnaire = relationship(
-        "Questionnaire",
-        backref=backref("questions", cascade="all, delete-orphan"),
-    )
+    questionnaire = relationship("Questionnaire", back_populates="questions")
     alternatives = relationship(
         "Alternative", back_populates="question", cascade="all, delete-orphan"
     )
@@ -77,7 +74,4 @@ class Alternative(_db.Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="alternatives")
-    question = relationship(
-        "Question",
-        backref=backref("alternatives", cascade=("all, delete-orphan")),
-    )
+    question = relationship("Question", back_populates="alternative")
