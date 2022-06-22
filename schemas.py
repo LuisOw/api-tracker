@@ -104,3 +104,7 @@ class QuestionnaireTemplate(Questionnaire):
 
     class Config:
         orm_mode = True
+
+
+class TemplateInput(BaseModel):
+    selected_ids: List[str]

@@ -167,7 +167,7 @@ async def post_questionnaires_template(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     research_id: str = None,
-    ids_list: List[int] = None,
+    ids_list: _schemas.TemplateInput = None,
 ):
     saved_questionnaires = _services.add_questionnaire_templates(
         db=db, research_id=research_id, owner_id=current_user.id, ids_list=ids_list
