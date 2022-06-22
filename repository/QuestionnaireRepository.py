@@ -48,11 +48,16 @@ def update_questionnaire(
 
 
 def delete_questionnaire(db: Session, research_id: int, id: int, owner_id: int):
-    db.query(Questionnaire).filter(
-        Questionnaire.research_id == research_id,
-        Questionnaire.id == id,
-        Questionnaire.owner_id == owner_id,
-    ).delete()
+    questionnaire = (
+        db.query(Questionnaire)
+        .filter(
+            Questionnaire.research_id == research_id,
+            Questionnaire.id == id,
+            Questionnaire.owner_id == owner_id,
+        )
+        .first()
+    )
+    db.delete(questionnaire)
     db.commit()
 
 

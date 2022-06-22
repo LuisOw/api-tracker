@@ -25,7 +25,10 @@ def update_research(db: Session, research: ResearchCreate, owner_id: str, id: st
 
 
 def delete_research(db: Session, owner_id: str, research_id: str):
-    db.query(Research).filter(
-        Research.owner_id == owner_id, Research.id == research_id
-    ).delete()
+    research = (
+        db.query(Research)
+        .filter(Research.owner_id == owner_id, Research.id == research_id)
+        .first()
+    )
+    db.delete(research)
     db.commit()

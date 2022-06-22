@@ -53,11 +53,16 @@ def update_question(
 
 
 def delete_question(db: Session, questionnaire_id: int, id: int, owner_id: int):
-    db.query(Question).filter(
-        Question.questionnaire_id == questionnaire_id,
-        Question.id == id,
-        Question.owner_id == owner_id,
-    ).delete()
+    question = (
+        db.query(Question)
+        .filter(
+            Question.questionnaire_id == questionnaire_id,
+            Question.id == id,
+            Question.owner_id == owner_id,
+        )
+        .first()
+    )
+    db.delete(question)
     db.commit()
 
 
