@@ -169,6 +169,7 @@ async def post_questionnaires_template(
     research_id: str = None,
     ids_list: _schemas.TemplateInput = None,
 ):
+    print(ids_list)
     saved_questionnaires = _services.add_questionnaire_templates(
         db=db, research_id=research_id, owner_id=current_user.id, ids_list=ids_list
     )
