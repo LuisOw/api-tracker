@@ -91,3 +91,15 @@ def add_questionnaires_from_template(
     db.commit()
     db.refresh(db_questionnaire)
     return db_questionnaire
+
+
+def get_questionnaire(db: Session, research_id: int, id: int, owner_id: int):
+    return (
+        db.query(Questionnaire)
+        .filter(
+            Questionnaire.research_id == research_id,
+            Questionnaire.id == id,
+            Questionnaire.owner_id == owner_id,
+        )
+        .first()
+    )

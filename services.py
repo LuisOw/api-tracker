@@ -94,6 +94,17 @@ def update_questionnaire(
     id: int,
     owner_id: int,
 ):
+
+    questionnaire_from_db = _questionnaireRepo.get_questionnaire(
+        db=db, research_id=research_id, id=id, owner_id=owner_id
+    )
+    if (
+        questionnaire_from_db.public == "template"
+        and questionnaire.public != "template"
+    ):
+        raise ValueError(
+            "Questionnaires of type template should not be changed to private or public"
+        )
     _questionnaireRepo.update_questionnaire(
         db, questionnaire, research_id, id, owner_id
     )

@@ -37,7 +37,7 @@ async def create_account(
     try:
         user = _services.create_user(db, user_info)
     except Exception as e:
-        raise _fastapi.HTTPException(status_code=40, detail="Invalid email")
+        raise _fastapi.HTTPException(status_code=400, detail="Invalid email")
 
     return _services.create_access_token(id=user.id)
 
@@ -140,7 +140,15 @@ async def put_questionnaire(
     research_id: str = None,
     id: str = None,
 ):
-    _services.update_questionnaire(db, questionnaire, research_id, id, current_user.id)
+    try:
+        _services.update_questionnaire(
+            db, questionnaire, research_id, id, current_user.id
+        )
+    except ValueError:
+        raise _fastapi.HTTPException(
+            status_code=400,
+            detail="Unable to update 'visibilidade' property from template",
+        )
 
 
 @app.delete(
