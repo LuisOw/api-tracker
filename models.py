@@ -25,7 +25,7 @@ class Research(_db.Base):
     title = Column(String)
     visibility = Column(String)
     state = Column(String)
-    intialAge = Column(Integer)
+    initialAge = Column(Integer)
     finalAge = Column(Integer)
     initialIncome = Column(Integer)
     finalIncome = Column(Integer)
