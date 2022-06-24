@@ -58,7 +58,7 @@ async def login(
     return _services.create_access_token(id=user.id)
 
 
-@app.get("/pesquisas", tags=["Pesquisa"], response_model=_schemas.Research)
+@app.get("/pesquisas", tags=["Pesquisa"])
 async def get_researches(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
