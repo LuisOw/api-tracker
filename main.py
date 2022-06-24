@@ -58,7 +58,7 @@ async def login(
     return _services.create_access_token(id=user.id)
 
 
-@app.get("/pesquisas", tags=["Pesquisa"])
+@app.get("/pesquisas", tags=["Pesquisa"], response_model=_schemas.Research)
 async def get_researches(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
@@ -66,7 +66,7 @@ async def get_researches(
     return _services.get_all_researches_by_user(db, current_user.id)
 
 
-@app.post("/pesquisas", tags=["Pesquisa"])
+@app.post("/pesquisas", tags=["Pesquisa"], response_model=_schemas.Research)
 async def post_research(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
