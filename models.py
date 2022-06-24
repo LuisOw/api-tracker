@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 
 import database as _db
 
@@ -23,6 +23,16 @@ class Research(_db.Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
+    visibility = Column(String)
+    state = Column(String)
+    intial_age = Column(Integer)
+    final_age = Column(Integer)
+    initial_income = Column(Integer)
+    final_income = Column(Integer)
+    race = Column(String)
+    gender = Column(String)
+    sexual_orientation = Column(String)
+    code = Column(String)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="researches")

@@ -1,3 +1,4 @@
+import random, string
 from typing import List
 import fastapi as _fastapi
 import fastapi.security as _security
@@ -55,7 +56,10 @@ def get_all_researches_by_user(db: _orm.Session, owner_id: int):
 
 
 def create_research(db: _orm.Session, research: _schemas.ResearchCreate, user_id: int):
-    return _researchRepo.create_research(db, research, user_id)
+    code = ""
+    if research.visibility == "private":
+        code = "".join(random.choices(string.ascii_letters + string.digits, k=10))
+    return _researchRepo.create_research(db, research, user_id, code)
 
 
 def update_research(

@@ -9,8 +9,10 @@ def get_all_researches_by_user(db: Session, owner_id: str):
     return db.query(Research).filter(Research.owner_id == owner_id).all()
 
 
-def create_research(db: Session, research: ResearchCreate, user_id: str):
-    db_research = Research(**research.dict(), owner_id=user_id)
+def create_research(db: Session, research: ResearchCreate, user_id: str, code: str):
+    db_research = Research(
+        **research.dict(), owner_id=user_id, state="inactive", code=code
+    )
     db.add(db_research)
     db.commit()
     db.refresh(db_research)

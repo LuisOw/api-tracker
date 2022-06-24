@@ -4,6 +4,14 @@ from typing import List, Union
 
 class ResearchBase(BaseModel):
     title: str
+    visibility: str
+    intial_age: int
+    final_age: int
+    initial_income: int
+    final_income: int
+    race: str
+    gender: str
+    sexual_orientation: str
 
 
 class ResearchCreate(ResearchBase):
@@ -12,6 +20,8 @@ class ResearchCreate(ResearchBase):
 
 class Research(ResearchBase):
     id: int
+    state: str
+    code: str
 
     class Config:
         orm_mode = True
