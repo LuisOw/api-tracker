@@ -1,3 +1,4 @@
+from curses import reset_shell_mode
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
@@ -20,9 +21,15 @@ def create_research(db: Session, research: ResearchCreate, user_id: str, code: s
 
 
 def update_research(db: Session, research: ResearchCreate, owner_id: str, id: str):
-    db.query(Research).filter(Research.owner_id == owner_id, Research.id == id).update(
-        values={Research.title: research.title}
+    research_from_db = (
+        db.query(Research)
+        .filter(Research.owner_id == owner_id, Research.id == id)
+        .first()
     )
+    research_data = research.dict(exclude_unset=True)
+    for key, value in research_data.items():
+        setattr(research_from_db, key, value)
+    db.add(research_from_db)
     db.commit()
 
 

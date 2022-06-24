@@ -57,7 +57,7 @@ def get_all_researches_by_user(db: _orm.Session, owner_id: int):
 
 def create_research(db: _orm.Session, research: _schemas.ResearchCreate, user_id: int):
     code = ""
-    if research.visibility == "private":
+    if research.visibility == "privado":
         code = "".join(random.choices(string.ascii_letters + string.digits, k=10))
     return _researchRepo.create_research(db, research, user_id, code)
 
