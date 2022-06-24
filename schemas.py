@@ -5,7 +5,7 @@ from typing import List, Union
 class ResearchBase(BaseModel):
     title: str
     visibility: str
-    intialAge: int
+    initialAge: int
     finalAge: int
     initialIncome: int
     finalIncome: int
