@@ -23,6 +23,7 @@ class Research(_db.Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
+    description = Column(String)
     visibility = Column(String)
     state = Column(String)
     initialAge = Column(Integer)

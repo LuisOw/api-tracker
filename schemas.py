@@ -5,13 +5,14 @@ from typing import List, Union
 class ResearchBase(BaseModel):
     title: str
     visibility: str
-    initialAge: int
-    finalAge: int
-    initialIncome: int
-    finalIncome: int
-    race: str
-    gender: str
-    sexualOrientation: str
+    description: str
+    initialAge: Union[int, None] = None
+    finalAge: Union[int, None] = None
+    initialIncome: Union[int, None] = None
+    finalIncome: Union[int, None] = None
+    race: Union[str, None] = None
+    gender: Union[str, None] = None
+    sexualOrientation: Union[str, None] = None
 
 
 class ResearchCreate(ResearchBase):

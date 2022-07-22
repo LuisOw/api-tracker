@@ -63,9 +63,9 @@ def create_research(db: _orm.Session, research: _schemas.ResearchCreate, user_id
 
 
 def update_research(
-    db: _orm.Session, research: _schemas.ResearchCreate, user_id: int, id: int
+    db: _orm.Session, research: _schemas.ResearchCreate, owner_id: int, id: int
 ):
-    _researchRepo.update_research(db, research, user_id, id)
+    _researchRepo.update_research(db=db, research=research, owner_id=owner_id, id=id)
 
 
 def delete_research(db: _orm.Session, owner_id: int, research_id: int):

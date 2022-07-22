@@ -1,4 +1,3 @@
-from curses import reset_shell_mode
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
