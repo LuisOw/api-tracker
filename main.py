@@ -77,7 +77,6 @@ async def post_research(
 
 @app.put(
     "/pesquisas/{id}",
-    status_code=204,
     response_class=_fastapi.Response,
     tags=["Pesquisa"],
 )
