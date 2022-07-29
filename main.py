@@ -95,6 +95,7 @@ async def put_research(
     status_code=204,
     response_class=_fastapi.Response,
     tags=["Pesquisa"],
+    response_model=_schemas.Research,
 )
 async def set_status(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
