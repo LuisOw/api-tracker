@@ -90,8 +90,8 @@ async def put_research(
     _services.update_research(db=db, research=research, owner_id=current_user.id, id=id)
 
 
-@app.get(
-    "pesquisas/{id}",
+@app.patch(
+    "/pesquisas/{id}",
     response_class=_fastapi.Response,
     tags=["Pesquisa"],
     response_model=_schemas.Research,
