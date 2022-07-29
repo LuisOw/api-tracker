@@ -90,6 +90,20 @@ async def put_research(
     _services.update_research(db=db, research=research, owner_id=current_user.id, id=id)
 
 
+@app.patch(
+    "pesquisas/{id}",
+    status_code=204,
+    response_class=_fastapi.Response,
+    tags=["Pesquisa"],
+)
+async def set_status(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    id: str = None,
+):
+    _services.change_research_status(db=db, owner_id=current_user.id, research_id=id)
+
+
 @app.delete(
     "/pesquisas/{id}",
     status_code=204,
