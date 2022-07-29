@@ -101,7 +101,9 @@ async def set_status(
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     id: str = None,
 ):
-    _services.change_research_status(db=db, owner_id=current_user.id, research_id=id)
+    return _services.change_research_status(
+        db=db, owner_id=current_user.id, research_id=id
+    )
 
 
 @app.delete(

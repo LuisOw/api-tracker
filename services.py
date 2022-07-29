@@ -78,6 +78,7 @@ def change_research_status(db: _orm.Session, owner_id: int, research_id: int):
     )
     print(research)
     print(research["status"])
+    return research
 
 
 def get_all_questionnaires_by_research(
