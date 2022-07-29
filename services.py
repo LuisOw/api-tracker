@@ -76,8 +76,7 @@ def change_research_status(db: _orm.Session, owner_id: int, research_id: int):
     research = _researchRepo.get_one_research_by_id(
         db=db, owner_id=owner_id, research_id=research_id
     )
-    print(research)
-    print(research["status"])
+    print(research.status)
     return research
 
 
