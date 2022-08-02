@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 
 import database as _db
@@ -26,6 +26,8 @@ class Research(_db.Base):
     description = Column(String)
     visibility = Column(String)
     state = Column(String)
+    startTime = Column(DateTime)
+    endTime = Column(DateTime)
     initialAge = Column(Integer)
     finalAge = Column(Integer)
     initialIncome = Column(Integer)

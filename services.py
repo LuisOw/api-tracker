@@ -1,3 +1,4 @@
+import datetime
 import random, string
 from typing import List
 import fastapi as _fastapi
@@ -65,7 +66,14 @@ def create_research(db: _orm.Session, research: _schemas.ResearchCreate, user_id
 def update_research(
     db: _orm.Session, research: _schemas.ResearchCreate, owner_id: int, id: int
 ):
-    _researchRepo.update_research(db=db, research=research, owner_id=owner_id, id=id)
+    research_from_db = _researchRepo.get_one_research_by_id(
+        db=db, owner_id=owner_id, research_id=id
+    )
+    if getattr(research_from_db, "state") != "inativa":
+        raise ValueError("Only inactive researches should be changed")
+    _researchRepo.update_research(
+        db=db, research=research, research_from_db=research_from_db
+    )
 
 
 def delete_research(db: _orm.Session, owner_id: int, research_id: int):
@@ -76,8 +84,14 @@ def change_research_status(db: _orm.Session, owner_id: int, research_id: int):
     research = _researchRepo.get_one_research_by_id(
         db=db, owner_id=owner_id, research_id=research_id
     )
-    print(getattr(research, "state"))
-    return research
+    if getattr(research, "state") == "inativa":
+        setattr(research, "state", "ativa")
+        setattr(research, "startTime", datetime.datetime.now())
+    else:
+        setattr(research, "state", "encerrada")
+        setattr(research, "endTime", datetime.datetime.now())
+
+    return _researchRepo.save_existing_research(db=db, research=research)
 
 
 def get_all_questionnaires_by_research(

@@ -87,12 +87,19 @@ async def put_research(
     research: _schemas.ResearchCreate = None,
     id: str = None,
 ):
-    _services.update_research(db=db, research=research, owner_id=current_user.id, id=id)
+    try:
+        _services.update_research(
+            db=db, research=research, owner_id=current_user.id, id=id
+        )
+    except ValueError:
+        raise _fastapi.HTTPException(
+            status_code=400,
+            detail="Unable to update active or finished researches",
+        )
 
 
 @app.patch(
     "/pesquisas/{id}",
-    response_class=_fastapi.Response,
     tags=["Pesquisa"],
     response_model=_schemas.Research,
 )

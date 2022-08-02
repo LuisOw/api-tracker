@@ -17,9 +17,11 @@ def get_one_research_by_id(db: Session, owner_id: str, research_id: str):
     )
 
 
-def create_research(db: Session, research: ResearchCreate, user_id: str, code: str):
+def create_research(
+    db: Session, research: ResearchCreate, user_id: str, code: str
+) -> Research:
     db_research = Research(
-        **research.dict(), owner_id=user_id, state="inactive", code=code
+        **research.dict(), owner_id=user_id, state="inativa", code=code
     )
     db.add(db_research)
     db.commit()
@@ -27,8 +29,7 @@ def create_research(db: Session, research: ResearchCreate, user_id: str, code: s
     return db_research
 
 
-def update_research(db: Session, research: ResearchCreate, owner_id: str, id: str):
-    research_from_db = get_one_research_by_id(db=db, owner_id=owner_id, research_id=id)
+def update_research(db: Session, research: ResearchCreate, research_from_db: Research):
     research_data = research.dict(exclude_unset=True)
     for key, value in research_data.items():
         setattr(research_from_db, key, value)
@@ -44,7 +45,8 @@ def delete_research(db: Session, owner_id: str, research_id: str):
     db.commit()
 
 
-def change_research_status(db: Session, owner_id: str, research_id: str) -> Research:
-    research_from_db = get_one_research_by_id(
-        db=db, owner_id=owner_id, research_id=research_id
-    )
+def save_existing_research(db: Session, research: Research) -> Research:
+    db.add(research)
+    db.commit()
+    db.refresh(research)
+    return research

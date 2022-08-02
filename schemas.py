@@ -1,3 +1,4 @@
+import datetime
 from pydantic import BaseModel
 from typing import List, Union
 
@@ -23,6 +24,8 @@ class Research(ResearchBase):
     id: int
     state: str
     code: str
+    startTime: Union[datetime.datetime, None] = None
+    endTime: Union[datetime.datetime, None] = None
 
     class Config:
         orm_mode = True
