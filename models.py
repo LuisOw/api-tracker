@@ -24,7 +24,7 @@ class Dummy(_db.Base):
     id = Column(Integer, primary_key=True, index=True)
 
     alternative_answers = relationship(
-        "AlternativeAwnsers", back_populates="owner", cascade="all, delete-oprhan"
+        "AlternativeAwnsers", back_populates="owner", cascade="all, delete-orphan"
     )
 
 
@@ -53,7 +53,7 @@ class Research(_db.Base):
         "Questionnaire", back_populates="research", cascade="all, delete-orphan"
     )
     alternative_answers = relationship(
-        "AlternativeAwnsers", back_populates="research", cascade="all, delete-oprhan"
+        "AlternativeAwnsers", back_populates="research", cascade="all, delete-orphan"
     )
 
 
@@ -102,7 +102,7 @@ class Alternative(_db.Base):
     owner = relationship("User", back_populates="alternatives")
     question = relationship("Question", back_populates="alternatives")
     alternative_answers = relationship(
-        "AlternativeAwnsers", back_populates="alternative", cascade="all, delete-oprhan"
+        "AlternativeAwnsers", back_populates="alternative", cascade="all, delete-orphan"
     )
 
 
