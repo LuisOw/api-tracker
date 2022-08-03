@@ -3,6 +3,7 @@ import fastapi as _fastapi
 import fastapi.security as _security
 import sqlalchemy.orm as _orm
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 import schemas as _schemas
 import services as _services
@@ -337,3 +338,14 @@ async def get_public_questionanires(
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return _services.get_public_questionnaires(db=db)
+
+
+"""
+@app.get("/pesquisas/{id}/arquivo", tags=["Pesquisa"], response_class=FileResponse)
+async def download_file(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    id: str = None,
+):
+    _services.get_file()
+"""

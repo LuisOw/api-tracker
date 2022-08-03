@@ -18,6 +18,16 @@ class User(_db.Base):
     alternatives = relationship("Alternative", back_populates="owner")
 
 
+class Dummy(_db.Base):
+    __tablename__ = "dummy"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    alternative_answers = relationship(
+        "AlternativeAwnsers", back_populates="owner", cascade="all, delete-oprhan"
+    )
+
+
 class Research(_db.Base):
     __tablename__ = "researches"
 
@@ -41,6 +51,9 @@ class Research(_db.Base):
     owner = relationship("User", back_populates="researches")
     questionnaires = relationship(
         "Questionnaire", back_populates="research", cascade="all, delete-orphan"
+    )
+    alternative_answers = relationship(
+        "AlternativeAwnsers", back_populates="research", cascade="all, delete-oprhan"
     )
 
 
@@ -88,3 +101,21 @@ class Alternative(_db.Base):
 
     owner = relationship("User", back_populates="alternatives")
     question = relationship("Question", back_populates="alternatives")
+    alternative_answers = relationship(
+        "AlternativeAwnsers", back_populates="alternative", cascade="all, delete-oprhan"
+    )
+
+
+class AlternativeAnswer(_db.Base):
+    __tablename__ = "alternatives_answer"
+
+    id = Column(Integer, primary_key=True, index=True)
+    alternative = Column(String)
+    text = Column(String)
+    owner_id = Column(Integer, ForeignKey("dummy.id"))
+    alternative_id = Column(Integer, ForeignKey("alternatives.id"))
+    research_id = Column(Integer, ForeignKey("researches.id"), index=True)
+
+    owner = relationship("Dummy", back_populates="alternative_answers")
+    alternative = relationship("Alternative", back_populates="alternative_answers")
+    research = relationship("Research", back_populates="alternative_answers")
