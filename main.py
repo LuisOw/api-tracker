@@ -340,12 +340,10 @@ async def get_public_questionanires(
     return _services.get_public_questionnaires(db=db)
 
 
-"""
 @app.get("/pesquisas/{id}/arquivo", tags=["Pesquisa"], response_class=FileResponse)
 async def download_file(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
     db: _orm.Session = _fastapi.Depends(_services.get_db),
     id: str = None,
 ):
-    _services.get_file()
-"""
+    return _services.get_file(db=db, research_id=id, owner_id=current_user.id)

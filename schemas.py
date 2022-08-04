@@ -122,3 +122,19 @@ class QuestionnaireTemplate(Questionnaire):
 
 class TemplateInput(BaseModel):
     selected_ids: List[str]
+
+
+class AnswersBase(BaseModel):
+    alternative_chosen: str
+    text: str
+
+
+class AnswerCreate(AnswersBase):
+    pass
+
+
+class Answers(AnswersBase):
+    id: int
+
+    class Config:
+        orm_mode = True

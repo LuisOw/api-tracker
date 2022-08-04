@@ -1,3 +1,4 @@
+import csv
 import datetime
 import random, string
 from typing import List
@@ -14,6 +15,7 @@ import repository.ResearchRepository as _researchRepo
 import repository.QuestionnaireRepository as _questionnaireRepo
 import repository.QuestionRepository as _questionRepo
 import repository.AlternativeRepository as _alternativeRepo
+import repository.AlternativeAnswerRepository as _alternativeAwnserRepo
 import auth.AuthHandle as _auth
 import schemas as _schemas
 
@@ -264,6 +266,41 @@ def add_questionnaire_templates(
     return final_questionnaire_list
 
 
-"""
-def get_file(db: _orm.Session, research_id=str, owner_id=str):
-"""
+def populate_sample_data(
+    db: _orm.Session, research_id: int, alternative_id: int, number_of_answers: int
+):
+    for i in number_of_answers:
+        answer = _schemas.AnswerCreate(
+            alternative_chosen="Alternativa " + i, text="Texto " + i
+        )
+        _alternativeAwnserRepo.create_answer(
+            db=db, answer=answer, research_id=research_id, alternative_id=alternative_id
+        )
+
+
+def get_file(db: _orm.Session, research_id: int, alternative_id: int, owner_id: int):
+    answers = _alternativeAwnserRepo.get_answers_of_research(
+        db=db, research_id=research_id, owner_id=owner_id
+    )
+    with open("test.csv", "w", newline="") as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=",")
+        csvwriter.writerow(
+            [
+                "Pesquisa Nome",
+                "Alternativa Texto",
+                "Alternativa Valor",
+                "Resposta Alternativa",
+                "Resposta Texto",
+            ]
+        )
+        for a in answers:
+            csvwriter.writerow(
+                [
+                    a.research.title,
+                    a.alternative.text,
+                    a.alternative.value,
+                    a.alternative_chosen,
+                    a.text,
+                ]
+            )
+    return "test.csv"

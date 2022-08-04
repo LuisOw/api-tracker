@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
 
 from schemas import ResearchCreate
 from models import Research
