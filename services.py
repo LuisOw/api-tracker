@@ -266,9 +266,8 @@ def add_questionnaire_templates(
     return final_questionnaire_list
 
 
-def populate_sample_data(
-    db: _orm.Session, research_id: int, alternative_id: int, number_of_answers: int
-):
+def populate_sample_data(db: _orm.Session, research_id: int, alternative_id: int):
+    number_of_answers = random.randint(1, 6)
     for i in range(number_of_answers):
         answer = _schemas.AnswerCreate(
             alternative_chosen="Alternativa " + str(i), text="Texto " + str(i)
@@ -279,15 +278,6 @@ def populate_sample_data(
 
 
 def get_file(db: _orm.Session, research_id: int, owner_id: int):
-    populate_sample_data(
-        db=db, research_id=research_id, alternative_id=1, number_of_answers=2
-    )
-    populate_sample_data(
-        db=db, research_id=research_id, alternative_id=2, number_of_answers=7
-    )
-    populate_sample_data(
-        db=db, research_id=research_id, alternative_id=3, number_of_answers=15
-    )
     answers = _alternativeAwnserRepo.get_answers_of_research(
         db=db, research_id=research_id, owner_id=owner_id
     )

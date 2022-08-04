@@ -351,3 +351,23 @@ async def download_file(
     id: str = None,
 ):
     return _services.get_file(db=db, research_id=id, owner_id=current_user.id)
+
+
+@app.post(
+    "/dummy/{research_id}/{alternative_id}",
+    tags=["Dummy"],
+    status_code=204,
+    response_class=_fastapi.Response,
+)
+async def generate_sample_data(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    research_id: str = None,
+    alternative_id: str = None,
+):
+
+    _services.populate_sample_data(
+        db=db,
+        research_id=research_id,
+        alternative_id=alternative_id,
+    )
