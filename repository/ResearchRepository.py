@@ -1,11 +1,15 @@
 from sqlalchemy.orm import Session
 
 from schemas import ResearchCreate
-from models import Research
+from models import Research, Subject
 
 
 def get_all_researches_by_user(db: Session, owner_id: str):
     return db.query(Research).filter(Research.owner_id == owner_id).all()
+
+
+def get_all_researches_by_subject(db: Session, id: str):
+    return db.query(Research).filter(Research.subjects.any(id=id)).all()
 
 
 def get_one_research_by_id(db: Session, owner_id: str, research_id: str):
@@ -14,6 +18,10 @@ def get_one_research_by_id(db: Session, owner_id: str, research_id: str):
         .filter(Research.owner_id == owner_id, Research.id == research_id)
         .first()
     )
+
+
+def get_one_research_by_id_without_owner(db: Session, research_id: str):
+    return db.query(Research).filter(Research.id == research_id).first()
 
 
 def create_research(
@@ -49,3 +57,10 @@ def save_existing_research(db: Session, research: Research) -> Research:
     db.commit()
     db.refresh(research)
     return research
+
+
+def add_subject(db: Session, subject: Subject, id: int):
+    research = get_one_research_by_id_without_owner(db, id)
+    research.subjects.append(subject)
+    db.add(research)
+    db.commit()

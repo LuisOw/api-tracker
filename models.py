@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Table
 from sqlalchemy.orm import relationship
 
 import database as _db
@@ -16,6 +16,35 @@ class User(_db.Base):
     questionnaires = relationship("Questionnaire", back_populates="owner")
     questions = relationship("Question", back_populates="owner")
     alternatives = relationship("Alternative", back_populates="owner")
+
+
+research_subject = Table(
+    "research_subject",
+    _db.Base.metadata,
+    Column("subject_id", ForeignKey("subjects.id"), primary_key=True),
+    Column("research_id", ForeignKey("researches.id"), primary_key=True),
+)
+
+
+class Subject(_db.Base):
+    __tablename__ = "subjects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    chosen_name = Column(String)
+    hashed_password = Column(String)
+    initialAge = Column(Integer)
+    finalAge = Column(Integer)
+    initialIncome = Column(Integer)
+    finalIncome = Column(Integer)
+    race = Column(String)
+    gender = Column(String)
+    sexualOrientation = Column(String)
+
+    researches = relationship(
+        "Research", secondary=research_subject, back_populates="subjects"
+    )
+    alternatives_answer = relationship("AlternativeAnswer", back_populates="subject")
 
 
 class Research(_db.Base):
@@ -44,6 +73,9 @@ class Research(_db.Base):
     )
     alternative_answers = relationship(
         "AlternativeAnswer", back_populates="research", cascade="all, delete-orphan"
+    )
+    subjects = relationship(
+        "Subject", secondary=research_subject, back_populates="researches"
     )
 
 
@@ -104,6 +136,8 @@ class AlternativeAnswer(_db.Base):
     text = Column(String)
     alternative_id = Column(Integer, ForeignKey("alternatives.id"))
     research_id = Column(Integer, ForeignKey("researches.id"), index=True)
+    subject_id = Column(Integer, ForeignKey("subjects.id"), index=True)
 
     alternative = relationship("Alternative", back_populates="alternative_answers")
     research = relationship("Research", back_populates="alternative_answers")
+    subject = relationship("Subject", back_populates="alternatives_answer")

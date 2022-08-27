@@ -26,7 +26,7 @@ async def home():
     return {"hello": "olleh"}
 
 
-@app.post("/create", tags=["Conta"])
+@app.post("/pesquisador", tags=["Conta"])
 async def create_account(
     user_info: _schemas.UserCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
@@ -41,6 +41,23 @@ async def create_account(
         raise _fastapi.HTTPException(status_code=400, detail="Invalid email")
 
     return _services.create_access_token(id=user.id)
+
+
+@app.post("/participante", tags=["Conta"])
+async def create_account(
+    subject_info: _schemas.SubjectCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    subject = _services.get_subject_by_username(db, subject_info.username)
+    if subject:
+        raise _fastapi.HTTPException(status_code=400, detail="CPF already in use")
+
+    try:
+        subject = _services.create_subject(db, subject_info)
+    except Exception as e:
+        raise _fastapi.HTTPException(status_code=400, detail="Invalid CPF")
+
+    return _services.create_access_token(id=subject.id)
 
 
 @app.post("/token", tags=["Conta"])
@@ -371,3 +388,38 @@ async def generate_sample_data(
         research_id=research_id,
         alternative_id=alternative_id,
     )
+
+
+"""
+Subject endpoints
+"""
+
+
+@app.get(
+    "/participantes/pesquisas",
+    tags=["Partipante"],
+    response_model=List[_schemas.SimplifiedResearch],
+)
+async def subject_get_researches(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    return _services.get_all_researches_by_subject(db, current_subject.id)
+
+
+@app.patch(
+    "/participantes/pesquisas/{id}",
+    tags=["Partipante"],
+    status_code=204,
+    response_class=_fastapi.Response,
+)
+async def subject_patch_researches(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    id: int = None,
+):
+    return _services.add_subject_to_research(db, current_subject.id, id)

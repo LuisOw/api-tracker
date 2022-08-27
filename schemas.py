@@ -31,6 +31,16 @@ class Research(ResearchBase):
         orm_mode = True
 
 
+class SimplifiedResearch(BaseModel):
+    id: int
+    title: str
+    description: str
+    state: str
+
+    class Config:
+        orm_mode = True
+
+
 class QuestionnaireBase(BaseModel):
     title: str
     public: str
@@ -85,6 +95,11 @@ class UserBase(BaseModel):
     full_name: Union[str, None] = None
 
 
+class SubjectBase(BaseModel):
+    username: str
+    chosen_name: str
+
+
 class User(UserBase):
     disabled: Union[bool, None] = None
 
@@ -96,7 +111,15 @@ class UserCreate(UserBase):
     password: str
 
 
+class SubjectCreate(SubjectBase):
+    password: str
+
+
 class UserInDB(User):
+    hashed_password: str
+
+
+class SubjectInDB(SubjectBase):
     hashed_password: str
 
 
