@@ -43,23 +43,6 @@ async def create_account(
     return _services.create_access_token(id=user.id)
 
 
-@app.post("/participante", tags=["Conta"])
-async def create_account(
-    subject_info: _schemas.SubjectCreate,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-):
-    subject = _services.get_subject_by_username(db, subject_info.username)
-    if subject:
-        raise _fastapi.HTTPException(status_code=400, detail="CPF already in use")
-
-    try:
-        subject = _services.create_subject(db, subject_info)
-    except Exception as e:
-        raise _fastapi.HTTPException(status_code=400, detail="Invalid CPF")
-
-    return _services.create_access_token(id=subject.id)
-
-
 @app.post("/token", tags=["Conta"])
 async def login(
     form_data: _security.OAuth2PasswordRequestForm = _fastapi.Depends(),
@@ -393,6 +376,54 @@ async def generate_sample_data(
 """
 Subject endpoints
 """
+
+
+@app.post("/participante", tags=["Conta"], response_model=_schemas.SubjectReturn)
+async def create_account(
+    subject_info: _schemas.SubjectCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    subject = _services.get_subject_by_username(db, subject_info.username)
+    if subject:
+        raise _fastapi.HTTPException(status_code=400, detail="CPF already in use")
+
+    try:
+        subject = _services.create_subject(db, subject_info)
+    except Exception as e:
+        raise _fastapi.HTTPException(status_code=400, detail="Invalid CPF")
+
+    token_dict = _services.create_access_token(id=subject.id)
+    subject_return = _schemas.SubjectReturn(
+        username=subject.username,
+        chosen_name=subject.chosen_name,
+        token_type=token_dict["token_type"],
+        access_token=token_dict["access_token"],
+    )
+    return subject_return
+
+
+@app.post("/participante/token", tags=["Conta"], response_model=_schemas.SubjectReturn)
+async def login(
+    form_data: _security.OAuth2PasswordRequestForm = _fastapi.Depends(),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    print(form_data.username, form_data.password)
+    subject = _services.authenticate_user(db, form_data.username, form_data.password)
+    if not subject:
+        raise _fastapi.HTTPException(
+            status_code=_fastapi.status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    token_dict = _services.create_access_token(id=subject.id)
+    subject_return = _schemas.SubjectReturn(
+        username=subject.username,
+        chosen_name=subject.chosen_name,
+        token_type=token_dict["token_type"],
+        access_token=token_dict["access_token"],
+    )
+    return subject_return
 
 
 @app.get(

@@ -100,6 +100,11 @@ class SubjectBase(BaseModel):
     chosen_name: str
 
 
+class SubjectReturn(SubjectBase):
+    access_token: str
+    token_type: str
+
+
 class User(UserBase):
     disabled: Union[bool, None] = None
 
