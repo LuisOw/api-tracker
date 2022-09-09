@@ -76,7 +76,7 @@ def get_all_filtered(db: Session, subject: Subject, age: int = None):
         filters.append(Research.race == subject.race)
     if subject.sexualOrientation:
         filters.append(Research.sexualOrientation == subject.sexualOrientation)
-    if subject.age:
+    if age:
         filters.append(Research.initialAge <= age)
         filters.append(Research.finalAge >= age)
     if subject.income:
