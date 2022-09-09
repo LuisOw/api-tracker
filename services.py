@@ -1,13 +1,13 @@
 import csv
 import datetime
 import random, string
-from re import sub
 from typing import List
 import fastapi as _fastapi
 import fastapi.security as _security
 import sqlalchemy.orm as _orm
 import email_validator as _email_check
 from passlib.context import CryptContext
+from datetime import date
 
 
 import database as _db
@@ -353,11 +353,21 @@ def get_file(db: _orm.Session, research_id: int, owner_id: int):
 
 def get_all_filtered_researches(db: _orm.Session, subject_id: int):
     subject = _subjRepo.get_subject(db=db, subject_id=subject_id)
+    if subject.birth_date:
+        today = date.today()
+        subject_date = subject.birth_date
+        current_age = (
+            today.year
+            - subject_date.year
+            - ((today.month, today.day) < (subject_date.month, subject_date.day))
+        )
+        return _researchRepo.get_all_filtered(db=db, subject=subject, age=current_age)
     return _researchRepo.get_all_filtered(db=db, subject=subject)
 
 
 def patch_subject(db: _orm.Session, subject_id: int, filter_list: _schemas.FilterList):
     subject = _subjRepo.get_subject(db=db, subject_id=subject_id)
-    for f in filter_list:
-        setattr(subject, f, filter_list[f])
-    _subjRepo.save_existing_subject(subject=subject)
+    updated_attr = filter_list.dict()
+    for attr in updated_attr:
+        setattr(subject, attr, updated_attr[attr])
+    _subjRepo.save_existing_subject(db=db, subject=subject)

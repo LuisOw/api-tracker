@@ -169,10 +169,11 @@ class Answers(AnswersBase):
 
 
 class FilterList(BaseModel):
-    initialAge: Union[int, None] = None
-    finalAge: Union[int, None] = None
-    initialIncome: Union[int, None] = None
-    finalIncome: Union[int, None] = None
+    birth_date: Union[datetime.date, None] = None
+    income: Union[int, None] = None
     race: Union[str, None] = None
     gender: Union[str, None] = None
     sexualOrientation: Union[str, None] = None
+
+    class Config:
+        orm_mode = True

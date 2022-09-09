@@ -66,7 +66,7 @@ def add_subject(db: Session, subject: Subject, id: int):
     db.commit()
 
 
-def get_all_filtered(db: Session, subject: Subject):
+def get_all_filtered(db: Session, subject: Subject, age: int = None):
     filters = [Research.state != "encerrada"]
     filters.append(Research.visibility != "privado")
 
@@ -76,13 +76,11 @@ def get_all_filtered(db: Session, subject: Subject):
         filters.append(Research.race == subject.race)
     if subject.sexualOrientation:
         filters.append(Research.sexualOrientation == subject.sexualOrientation)
-    if subject.initialAge:
-        filters.append(Research.initialAge <= subject.initialAge)
-    if subject.finalAge:
-        filters.append(Research.finalAge >= subject.finalAge)
-    if subject.initialIncome:
-        filters.append(Research.initialIncome <= subject.initialIncome)
-    if subject.finalIncome:
-        filters.append(Research.finalIncome >= subject.finalIncome)
+    if subject.age:
+        filters.append(Research.initialAge <= age)
+        filters.append(Research.finalAge >= age)
+    if subject.income:
+        filters.append(Research.initialIncome <= subject.income)
+        filters.append(Research.finalIncome >= subject.income)
 
     return db.query(Research).filter(*filters).all()

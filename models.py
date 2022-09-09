@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Table
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Table, Date
 from sqlalchemy.orm import relationship
 
 import database as _db
@@ -33,10 +33,8 @@ class Subject(_db.Base):
     username = Column(String, unique=True, index=True)
     chosen_name = Column(String)
     hashed_password = Column(String)
-    initialAge = Column(Integer)
-    finalAge = Column(Integer)
-    initialIncome = Column(Integer)
-    finalIncome = Column(Integer)
+    birth_date = Column(Date)
+    income = Column(Integer)
     race = Column(String)
     gender = Column(String)
     sexualOrientation = Column(String)
