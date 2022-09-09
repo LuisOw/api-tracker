@@ -349,3 +349,15 @@ def get_file(db: _orm.Session, research_id: int, owner_id: int):
                 ]
             )
     return file_path
+
+
+def get_all_filtered_researches(db: _orm.Session, subject_id: int):
+    subject = _subjRepo.get_subject(db=db, subject_id=subject_id)
+    return _researchRepo.get_all_filtered(db=db, subject=subject)
+
+
+def patch_subject(db: _orm.Session, subject_id: int, filter_list: _schemas.FilterList):
+    subject = _subjRepo.get_subject(db=db, subject_id=subject_id)
+    for f in filter_list:
+        setattr(subject, f, filter_list[f])
+    _subjRepo.save_existing_subject(subject=subject)

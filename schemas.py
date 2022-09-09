@@ -166,3 +166,13 @@ class Answers(AnswersBase):
 
     class Config:
         orm_mode = True
+
+
+class FilterList(BaseModel):
+    initialAge: Union[int, None] = None
+    finalAge: Union[int, None] = None
+    initialIncome: Union[int, None] = None
+    finalIncome: Union[int, None] = None
+    race: Union[str, None] = None
+    gender: Union[str, None] = None
+    sexualOrientation: Union[str, None] = None

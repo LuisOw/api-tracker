@@ -428,7 +428,7 @@ async def login(
 
 @app.get(
     "/participantes/pesquisas",
-    tags=["Partipante"],
+    tags=["Participante"],
     response_model=List[_schemas.SimplifiedResearch],
 )
 async def subject_get_researches(
@@ -442,7 +442,7 @@ async def subject_get_researches(
 
 @app.patch(
     "/participantes/pesquisas/{id}",
-    tags=["Partipante"],
+    tags=["Participante"],
     status_code=204,
     response_class=_fastapi.Response,
 )
@@ -454,3 +454,35 @@ async def subject_patch_researches(
     id: int = None,
 ):
     return _services.add_subject_to_research(db, current_subject.id, id)
+
+
+@app.get(
+    "/participantes/pesquisas-filtradas",
+    tags=["Participante"],
+    response_model=List[_schemas.SimplifiedResearch],
+)
+async def get_filtered_researches(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    return _services.get_all_filtered_researches(db=db, subject_id=current_subject.id)
+
+
+@app.patch(
+    "/participantes/",
+    tags=["Participante"],
+    status_code=204,
+    response_class=_fastapi.Response,
+)
+async def patch_subjects(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    filter_list: _schemas.FilterList = None,
+):
+    _services.patch_subject(
+        db=db, subject_id=current_subject.id, filter_list=filter_list
+    )

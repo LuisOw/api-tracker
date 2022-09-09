@@ -26,3 +26,8 @@ def create_subject(
     db.commit()
     db.refresh(db_subject)
     return db_subject
+
+
+def save_existing_subject(db: Session, subject: models.Subject):
+    db.add(subject)
+    db.commit()
