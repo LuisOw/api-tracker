@@ -471,7 +471,7 @@ async def get_filtered_researches(
 
 
 @app.patch(
-    "/participantes/",
+    "/participantes",
     tags=["Participante"],
     status_code=204,
     response_class=_fastapi.Response,
@@ -486,3 +486,13 @@ async def patch_subjects(
     _services.patch_subject(
         db=db, subject_id=current_subject.id, filter_list=filter_list
     )
+
+
+@app.get("/participantes", tags=["Participante"], response_model=_schemas.FilterList)
+async def get_subject_filters(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    return _services.get_subject(db=db, subject_id=current_subject.id)
