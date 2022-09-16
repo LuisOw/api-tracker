@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from models import Question
+from models import Alternative
 from schemas import QuestionCreate
 
 
@@ -80,3 +81,14 @@ def add_questions_from_template(
     db.commit()
     db.refresh(db_question)
     return db_question
+
+
+def get_complete_questions_by_questionnaire_for_subject(
+    db: Session, questionnaire_id: int
+):
+    return (
+        db.query(Question)
+        .join(Alternative)
+        .filter(Question.questionnaire_id == questionnaire_id)
+        .all()
+    )

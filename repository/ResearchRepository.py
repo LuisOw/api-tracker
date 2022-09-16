@@ -84,3 +84,11 @@ def get_all_filtered(db: Session, subject: Subject, age: int = None):
         filters.append(Research.finalIncome >= subject.income)
 
     return db.query(Research).filter(*filters).all()
+
+
+def check_subject(db: Session, subject_id: int, research_id: int):
+    return (
+        db.query(Research)
+        .filter(Research.id == research_id, Research.subjects.any(id=subject_id))
+        .first()
+    )

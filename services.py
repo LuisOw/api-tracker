@@ -371,3 +371,35 @@ def patch_subject(db: _orm.Session, subject_id: int, filter_list: _schemas.Filte
     for attr in updated_attr:
         setattr(subject, attr, updated_attr[attr])
     _subjRepo.save_existing_subject(db=db, subject=subject)
+
+
+def get_subject_related_to_research(
+    db: _orm.Session, subject_id: int, research_id: int
+):
+    research = _researchRepo.check_subject(
+        db=db, subject_id=subject_id, research_id=research_id
+    )
+    if research:
+        return _questionnaireRepo.get_all_questionnaires_by_research_for_subject(
+            db=db, research_id=research_id
+        )
+    else:
+        raise _fastapi.HTTPException(
+            status_code=403, detail="Participante não possui acesso à pesquisa"
+        )
+
+
+def get_full_question(
+    db: _orm.Session, subject_id: int, research_id: int, questionnaire_id: int
+):
+    research = _researchRepo.check_subject(
+        db=db, subject_id=subject_id, research_id=research_id
+    )
+    if research:
+        return _questionRepo.get_complete_questions_by_questionnaire_for_subject(
+            db=db, questionnaire_id=questionnaire_id
+        )
+    else:
+        raise _fastapi.HTTPException(
+            status_code=403, detail="Participante não possui acesso à pesquisa"
+        )

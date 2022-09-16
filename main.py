@@ -496,3 +496,41 @@ async def get_subject_filters(
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return _services.get_subject(db=db, subject_id=current_subject.id)
+
+
+@app.get(
+    "/participantes/pesquisas/{id}/questionarios",
+    tags=["Participante"],
+    response_model=List[_schemas.Questionnaire],
+)
+async def get_subject_questionnaires(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    id: int = None,
+):
+    return _services.get_subject_related_to_research(
+        db=db, subject_id=current_subject.id, research_id=id
+    )
+
+
+@app.get(
+    "/participantes/pesquisas/{research_id}/questionarios/{id}/questionarios",
+    tags=["Participante"],
+    response_model=List[_schemas.QuestionTemplate],
+)
+async def get_subject_questions_and_alternatives(
+    current_subject: _schemas.SubjectBase = _fastapi.Depends(
+        _services.get_current_subject
+    ),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    research_id: int = None,
+    id: int = None,
+):
+    return _services.get_full_question(
+        db=db,
+        subject_id=current_subject.id,
+        research_id=research_id,
+        questionnaire_id=id,
+    )

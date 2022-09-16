@@ -103,3 +103,9 @@ def get_questionnaire(db: Session, research_id: int, id: int, owner_id: int):
         )
         .first()
     )
+
+
+def get_all_questionnaires_by_research_for_subject(db: Session, research_id: int):
+    return (
+        db.query(Questionnaire).filter(Questionnaire.research_id == research_id).all()
+    )
