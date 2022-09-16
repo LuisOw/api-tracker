@@ -516,7 +516,7 @@ async def get_subject_questionnaires(
 
 
 @app.get(
-    "/participantes/pesquisas/{research_id}/questionarios/{id}/questionarios",
+    "/participantes/pesquisas/{research_id}/questionarios/{id}/questoes",
     tags=["Participante"],
     response_model=List[_schemas.QuestionTemplate],
 )
