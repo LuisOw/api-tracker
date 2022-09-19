@@ -99,6 +99,7 @@ class Question(_db.Base):
     id = Column(Integer, primary_key=True, index=True)
     query = Column(String)
     order = Column(Integer)
+    type = Column(String)
     questionnaire_id = Column(Integer, ForeignKey("questionnaires.id"))
     owner_id = Column(Integer, ForeignKey("users.id"))
 
@@ -113,7 +114,6 @@ class Alternative(_db.Base):
     __tablename__ = "alternatives"
 
     id = Column(Integer, primary_key=True, index=True)
-    type = Column(String)
     text = Column(String)
     value = Column(Integer)
     question_id = Column(Integer, ForeignKey("questions.id"))

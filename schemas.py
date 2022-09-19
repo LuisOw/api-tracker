@@ -59,6 +59,7 @@ class Questionnaire(QuestionnaireBase):
 
 class QuestionBase(BaseModel):
     query: str
+    type: str
     order: int
 
 
@@ -74,7 +75,6 @@ class Question(QuestionBase):
 
 
 class AlternativeBase(BaseModel):
-    type: str
     text: str
     value: int
 
