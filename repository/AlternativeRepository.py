@@ -41,7 +41,6 @@ def update_alternative(
     ).update(
         values={
             Alternative.text: alternative.text,
-            Alternative.type: alternative.type,
             Alternative.value: alternative.value,
         }
     )

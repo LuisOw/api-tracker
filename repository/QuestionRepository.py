@@ -48,6 +48,7 @@ def update_question(
         values={
             Question.query: question.query,
             Question.order: question.order,
+            Question.type: question.type,
         }
     )
     db.commit()
