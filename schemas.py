@@ -153,12 +153,17 @@ class TemplateInput(BaseModel):
 
 
 class AnswersBase(BaseModel):
-    alternative_chosen: str
-    text: str
+    alternative_chosen: Union[str, None] = None
+    text: Union[str, None] = None
+    alternative_id: int
 
 
 class AnswerCreate(AnswersBase):
     pass
+
+
+class AwnserBulkCreate(BaseModel):
+    alternatives: List[AlternativeBase]
 
 
 class Answers(AnswersBase):

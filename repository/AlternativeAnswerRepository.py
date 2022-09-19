@@ -1,7 +1,6 @@
-from ntpath import join
 from sqlalchemy.orm import Session
 
-from schemas import AnswerCreate
+from schemas import AnswerCreate, AwnserBulkCreate
 from models import Alternative, AlternativeAnswer, Research
 
 
@@ -23,3 +22,16 @@ def get_answers_of_research(db: Session, research_id: int, owner_id: int):
         .filter(Research.owner_id == owner_id, Research.id == research_id)
         .all()
     )
+
+
+def create_bulk_answers(
+    db: Session, answers: AwnserBulkCreate, research_id: int, subject_id: int
+):
+    alternativeAnswers = [
+        AlternativeAnswer(
+            **answer.dict(), research_id=research_id, subject_id=subject_id
+        )
+        for answer in answers
+    ]
+    db.bulk_save_objects(alternativeAnswers)
+    db.commit()

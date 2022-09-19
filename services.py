@@ -403,3 +403,14 @@ def get_full_question(
         raise _fastapi.HTTPException(
             status_code=403, detail="Participante não possui acesso à pesquisa"
         )
+
+
+def post_alternative_answers(
+    db: _orm.Session,
+    subject_id: int,
+    research_id: int,
+    answers: _schemas.AwnserBulkCreate,
+):
+    _alternativeAwnserRepo.create_bulk_answers(
+        db=db, answers=answers, research_id=research_id, subject_id=subject_id
+    )
