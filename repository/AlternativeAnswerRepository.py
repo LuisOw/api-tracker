@@ -29,7 +29,11 @@ def create_bulk_answers(
 ):
     alternativeAnswers = [
         AlternativeAnswer(
-            **answer.dict(), research_id=research_id, subject_id=subject_id
+            alternative_chosen=answer.alternative_chosen,
+            text=answer.text,
+            alternative_id=answer.alternative_id,
+            research_id=research_id,
+            subject_id=subject_id,
         )
         for answer in answers
     ]
