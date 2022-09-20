@@ -28,14 +28,8 @@ def create_bulk_answers(
     db: Session, answers: AwnserBulkCreate, research_id: int, subject_id: int
 ):
     alternativeAnswers = [
-        AlternativeAnswer(
-            alternative_chosen=answer.alternative_chosen,
-            text=answer.text,
-            alternative_id=answer.alternative_id,
-            research_id=research_id,
-            subject_id=subject_id,
-        )
-        for answer in answers
+        AlternativeAnswer(answer, research_id=research_id, subject_id=subject_id)
+        for answer in answers.alternatives
     ]
     db.bulk_save_objects(alternativeAnswers)
     db.commit()
