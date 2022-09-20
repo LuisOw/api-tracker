@@ -163,7 +163,7 @@ class AnswerCreate(AnswersBase):
 
 
 class AwnserBulkCreate(BaseModel):
-    alternatives: List[AlternativeBase]
+    alternatives: List[AnswersBase]
 
 
 class Answers(AnswersBase):
