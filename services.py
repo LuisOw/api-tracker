@@ -411,6 +411,7 @@ def post_alternative_answers(
     research_id: int,
     answers: _schemas.AwnserBulkCreate,
 ):
+    [print(x) for x in answers]
     _alternativeAwnserRepo.create_bulk_answers(
         db=db, answers=answers, research_id=research_id, subject_id=subject_id
     )
