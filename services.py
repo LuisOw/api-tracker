@@ -333,22 +333,31 @@ def get_file(db: _orm.Session, research_id: int, owner_id: int):
         csvwriter.writerow(
             [
                 "Pesquisa Nome",
-                "Alternativa Texto",
-                "Alternativa Valor",
-                "Resposta Alternativa",
-                "Resposta Texto",
+                "Questionário título",
+                "Questão pergunta",
+                "Alternativa texto",
+                "Alternativa valor",
+                "Resposta escolhida",
+                "Resposta texto",
+                "Usuário",
+                "Tempo de uso",
             ]
         )
         for a in answers:
-            csvwriter.writerow(
-                [
-                    a.research.title,
-                    a.alternative.text,
-                    a.alternative.value,
-                    a.alternative_chosen,
-                    a.text,
-                ]
-            )
+            for usage in a.subject.usage_time:
+                csvwriter.writerow(
+                    [
+                        a.alternative.question.questionnaire.research.title,
+                        a.alternative.question.questionnaire.title,
+                        a.alternative.question.query,
+                        a.alternative.text,
+                        a.alternative.value,
+                        a.alternative_chosen,
+                        a.text,
+                        a.subject.id,
+                        usage.collected_time,
+                    ]
+                )
     return file_path
 
 

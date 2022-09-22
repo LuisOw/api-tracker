@@ -1,7 +1,15 @@
 from sqlalchemy.orm import Session
 
 from schemas import AnswerCreate, AwnserBulkCreate
-from models import Alternative, AlternativeAnswer, Research, Subject, UsageTime
+from models import (
+    Alternative,
+    AlternativeAnswer,
+    Question,
+    Questionnaire,
+    Research,
+    Subject,
+    UsageTime,
+)
 
 
 def create_answer(
@@ -15,17 +23,21 @@ def create_answer(
 
 
 def get_answers_of_research(db: Session, research_id: int, owner_id: int):
-    return (
-        db.query(Research)
-        .join(Research.alternative_answers)
-        .join(Research.subjects)
-        .join(Alternative)
+    query = (
+        db.query(AlternativeAnswer)
+        .join(AlternativeAnswer.alternative)
+        .join(Alternative.question)
+        .join(Question.questionnaire)
+        .join(Questionnaire.research)
+        .join(AlternativeAnswer.subject)
+        .join(Subject.usage_time)
         .filter(
             Research.owner_id == owner_id,
             Research.id == research_id,
         )
-        .all()
     )
+    print(query)
+    return query.all()
 
 
 def create_bulk_answers(
