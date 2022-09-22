@@ -182,3 +182,18 @@ class FilterList(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UsageTimeBase(BaseModel):
+    collected_time: str
+
+
+class UsageTimeCreate(UsageTimeBase):
+    pass
+
+
+class UsageTime(UsageTimeBase):
+    id: int
+
+    class Config:
+        orm_mode = True

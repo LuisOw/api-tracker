@@ -551,3 +551,21 @@ async def post_alternative_answers(
     return _services.post_alternative_answers(
         db=db, subject_id=current_user.id, research_id=research_id, answers=answers
     )
+
+
+@app.post(
+    "/participantes/uso",
+    tags=["Respostas"],
+    status_code=204,
+    response_class=_fastapi.Response,
+)
+async def post_usage_time(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    usage_time: _schemas.UsageTimeCreate = None,
+):
+    _services.post_usage_time(
+        db=db,
+        subject_id=current_user.id,
+        usage_time=usage_time,
+    )

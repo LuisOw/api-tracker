@@ -43,6 +43,7 @@ class Subject(_db.Base):
         "Research", secondary=research_subject, back_populates="subjects"
     )
     alternatives_answer = relationship("AlternativeAnswer", back_populates="subject")
+    usage_time = relationship("UsageTime", back_populates="subject")
 
 
 class Research(_db.Base):
@@ -63,6 +64,7 @@ class Research(_db.Base):
     gender = Column(String)
     sexualOrientation = Column(String)
     code = Column(String)
+    modules = Column(String)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="researches")
@@ -139,3 +141,13 @@ class AlternativeAnswer(_db.Base):
     alternative = relationship("Alternative", back_populates="alternative_answers")
     research = relationship("Research", back_populates="alternative_answers")
     subject = relationship("Subject", back_populates="alternatives_answer")
+
+
+class UsageTime(_db.Base):
+    __tablename__ = "usage_time"
+
+    id = Column(Integer, primary_key=True, index=True)
+    collected_time = Column(String)
+    subject_id = Column(Integer, ForeignKey("subjects.id"), index=True)
+
+    subject = relationship("Subject", back_populates="usage_time")

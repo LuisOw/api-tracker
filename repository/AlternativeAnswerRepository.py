@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from schemas import AnswerCreate, AwnserBulkCreate
-from models import Alternative, AlternativeAnswer, Research
+from models import Alternative, AlternativeAnswer, Research, Subject, UsageTime
 
 
 def create_answer(
@@ -16,10 +16,14 @@ def create_answer(
 
 def get_answers_of_research(db: Session, research_id: int, owner_id: int):
     return (
-        db.query(AlternativeAnswer)
-        .join(Research)
+        db.query(Research)
+        .join(Research.alternative_answers)
+        .join(Research.subjects)
         .join(Alternative)
-        .filter(Research.owner_id == owner_id, Research.id == research_id)
+        .filter(
+            Research.owner_id == owner_id,
+            Research.id == research_id,
+        )
         .all()
     )
 

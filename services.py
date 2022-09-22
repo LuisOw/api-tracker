@@ -11,6 +11,7 @@ from datetime import date
 
 
 import database as _db
+import repository.UsageTimeRepository as _usageRepo
 import repository.UserRepository as _userRepo
 import repository.ResearchRepository as _researchRepo
 import repository.QuestionnaireRepository as _questionnaireRepo
@@ -415,3 +416,11 @@ def post_alternative_answers(
     _alternativeAwnserRepo.create_bulk_answers(
         db=db, answers=answers, research_id=research_id, subject_id=subject_id
     )
+
+
+def post_usage_time(
+    db: _orm.Session,
+    subject_id: int,
+    usage_time: _schemas.UsageTimeCreate,
+):
+    _usageRepo.create_usage_time(db=db, subject_id=subject_id, usage_time=usage_time)
