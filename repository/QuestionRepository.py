@@ -92,3 +92,11 @@ def get_complete_questions_by_questionnaire_for_subject(
         .filter(Question.questionnaire_id == questionnaire_id)
         .all()
     )
+
+
+def get_by_id(db: Session, question_id: int, owner_id: int):
+    return (
+        db.query(Question)
+        .filter(Question.id == question_id, Question.owner_id == owner_id)
+        .first()
+    )

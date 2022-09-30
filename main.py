@@ -569,3 +569,16 @@ async def post_usage_time(
         subject_id=current_user.id,
         usage_time=usage_time,
     )
+
+
+@app.delete(
+    "/participantes",
+    tags=["Respostas"],
+    status_code=204,
+    response_class=_fastapi.Response,
+)
+async def delete_usage_time_of_user(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    _services.delete_usage_time(db=db, subject_id=current_user.id)

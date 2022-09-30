@@ -1,5 +1,6 @@
 import csv
 import datetime
+from hashlib import new
 import random, string
 from typing import List
 import fastapi as _fastapi
@@ -180,7 +181,22 @@ def create_question(
     questionnaire_id: int,
     owner_id: int,
 ):
-    return _questionRepo.create_question(db, question, questionnaire_id, owner_id)
+    if question.type == "descritiva":
+        placeholder_alternative = _schemas.AlternativeCreate(
+            text="placeholder", value=0
+        )
+        new_question = _questionRepo.create_question(
+            db, question, questionnaire_id, owner_id
+        )
+        create_alternative(
+            db=db,
+            alternative=placeholder_alternative,
+            question_id=new_question.id,
+            owner_id=owner_id,
+        )
+        return new_question
+    else:
+        return _questionRepo.create_question(db, question, questionnaire_id, owner_id)
 
 
 def update_question(
@@ -207,6 +223,11 @@ def create_alternative(
     question_id: int,
     owner_id: int,
 ):
+    question_from_db = _questionRepo.get_by_id(
+        db=db, question_id=question_id, owner_id=owner_id
+    )
+    if question_from_db.type == "descritiva":
+        raise ValueError("Pesquisas descritivas não podem ter alternativa")
     return _alternativeRepo.create_alternative(db, alternative, question_id, owner_id)
 
 
@@ -433,3 +454,7 @@ def post_usage_time(
     usage_time: _schemas.UsageTimeCreate,
 ):
     _usageRepo.create_usage_time(db=db, subject_id=subject_id, usage_time=usage_time)
+
+
+def delete_usage_time(db: _orm.Session, subject_id: int):
+    _usageRepo.delete_usage_time(db=db, subject_id=subject_id)
