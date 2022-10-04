@@ -1,6 +1,5 @@
 import csv
 import datetime
-from hashlib import new
 import random, string
 from typing import List
 import fastapi as _fastapi
@@ -183,7 +182,7 @@ def create_question(
 ):
     if question.type == "descritiva":
         placeholder_alternative = _schemas.AlternativeCreate(
-            text="placeholder", value=0
+            text="placeholder", value=-1
         )
         new_question = _questionRepo.create_question(
             db, question, questionnaire_id, owner_id
@@ -361,24 +360,25 @@ def get_file(db: _orm.Session, research_id: int, owner_id: int):
                 "Resposta escolhida",
                 "Resposta texto",
                 "Usuário",
-                "Tempo de uso",
             ]
         )
         for a in answers:
-            for usage in a.subject.usage_time:
-                csvwriter.writerow(
-                    [
-                        a.alternative.question.questionnaire.research.title,
-                        a.alternative.question.questionnaire.title,
-                        a.alternative.question.query,
-                        a.alternative.text,
-                        a.alternative.value,
-                        a.alternative_chosen,
-                        a.text,
-                        a.subject.id,
-                        usage.collected_time,
-                    ]
-                )
+            csvwriter.writerow(
+                [
+                    a.alternative.question.questionnaire.research.title,
+                    a.alternative.question.questionnaire.title,
+                    a.alternative.question.query,
+                    a.alternative.text,
+                    a.alternative.value,
+                    a.alternative_chosen,
+                    a.text,
+                    a.subject.id,
+                ]
+            )
+        csvwriter.writerow(["Usuário", "Tempo de uso"])
+        usage_time = _usageRepo.get_usage_time(db=db)
+        for ut in usage_time:
+            csvwriter.writerow([ut.subject.id, ut.collected_time])
     return file_path
 
 

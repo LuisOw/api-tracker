@@ -7,8 +7,6 @@ from models import (
     Question,
     Questionnaire,
     Research,
-    Subject,
-    UsageTime,
 )
 
 
@@ -30,10 +28,10 @@ def get_answers_of_research(db: Session, research_id: int, owner_id: int):
         .join(Question.questionnaire)
         .join(Questionnaire.research)
         .join(AlternativeAnswer.subject)
-        .join(Subject.usage_time)
         .filter(
             Research.owner_id == owner_id,
             Research.id == research_id,
+            Alternative.text != "placeholder",
         )
     )
     print(query)

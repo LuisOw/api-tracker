@@ -15,3 +15,7 @@ def delete_usage_time(db: Session, subject_id: int):
         synchronize_session=False
     )
     db.commit()
+
+
+def get_usage_time(db: Session):
+    return db.query(UsageTime).join(UsageTime.subject).all()
