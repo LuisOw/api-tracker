@@ -222,11 +222,6 @@ def create_alternative(
     question_id: int,
     owner_id: int,
 ):
-    question_from_db = _questionRepo.get_by_id(
-        db=db, question_id=question_id, owner_id=owner_id
-    )
-    if question_from_db.type == "descritiva":
-        raise ValueError("Pesquisas descritivas não podem ter alternativa")
     return _alternativeRepo.create_alternative(db, alternative, question_id, owner_id)
 
 
