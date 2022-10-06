@@ -72,6 +72,7 @@ def add_questions_from_template(
 ):
 
     db_question = Question(
+        type=original_question.type,
         query=original_question.query,
         order=original_question.order,
         questionnaire_id=new_questionnaire_id,

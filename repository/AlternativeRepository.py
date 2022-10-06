@@ -66,7 +66,6 @@ def add_alternative_from_template(
     )
     for original_alternative in original_alternatives:
         new_alternative = Alternative(
-            type=original_alternative.type,
             text=original_alternative.text,
             value=original_alternative.value,
             question_id=new_question_id,
