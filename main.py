@@ -140,7 +140,7 @@ async def delete_research_admin(
     id: str = None,
 ):
     if current_user.username == "luis@oswaldo.com":
-        _services.delete_research_admin(db, current_user.id, id)
+        _services.delete_research_admin(db, id)
     else:
         raise _fastapi.HTTPException(
             status_code=400,
