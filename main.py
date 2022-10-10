@@ -128,6 +128,26 @@ async def delete_research(
     _services.delete_research(db, current_user.id, id)
 
 
+@app.delete(
+    "/pesquisas/{id}",
+    status_code=204,
+    response_class=_fastapi.Response,
+    tags=["Pesquisa"],
+)
+async def delete_research_admin(
+    current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+    db: _orm.Session = _fastapi.Depends(_services.get_db),
+    id: str = None,
+):
+    if current_user.username == "luis@oswaldo.com":
+        _services.delete_research(db, current_user.id, id)
+    else:
+        raise _fastapi.HTTPException(
+            status_code=400,
+            detail="Unable to update active or finished researches",
+        )
+
+
 @app.get("/pesquisas/{research_id}/questionarios", tags=["Questionario"])
 async def get_questionnaires(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),

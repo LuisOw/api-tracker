@@ -106,6 +106,10 @@ def delete_research(db: _orm.Session, owner_id: int, research_id: int):
     _researchRepo.delete_research(db, owner_id, research_id)
 
 
+def delete_research_admin(db: _orm.Session, research_id: int):
+    _researchRepo.delete_research_admin(db, research_id)
+
+
 def change_research_status(db: _orm.Session, owner_id: int, research_id: int):
     research = _researchRepo.get_one_research_by_id(
         db=db, owner_id=owner_id, research_id=research_id

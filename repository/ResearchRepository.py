@@ -52,6 +52,12 @@ def delete_research(db: Session, owner_id: str, research_id: str):
     db.commit()
 
 
+def delete_research_admin(db: Session, research_id: str):
+    research_from_db = get_one_research_by_id(db=db, research_id=research_id)
+    db.delete(research_from_db)
+    db.commit()
+
+
 def save_existing_research(db: Session, research: Research) -> Research:
     db.add(research)
     db.commit()
