@@ -129,10 +129,10 @@ async def delete_research(
 
 
 @app.delete(
-    "/pesquisas/{id}",
+    "/admin/pesquisas/{id}",
     status_code=204,
     response_class=_fastapi.Response,
-    tags=["Pesquisa"],
+    tags=["Admin"],
 )
 async def delete_research_admin(
     current_user: _schemas.User = _fastapi.Depends(_services.get_current_user),
@@ -140,7 +140,7 @@ async def delete_research_admin(
     id: str = None,
 ):
     if current_user.username == "luis@oswaldo.com":
-        _services.delete_research(db, current_user.id, id)
+        _services.delete_research_admin(db, current_user.id, id)
     else:
         raise _fastapi.HTTPException(
             status_code=400,
